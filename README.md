@@ -9,6 +9,9 @@ The constructions are demonstrated on the following mathematical functions:
 - *Factorial.* This is a classical primitive recursive function [1] which is
 a de facto Hello world of functional programming.
 - *Fibonacci sequence.* Another classical primitive recursive function.
+- *Ackermann function.* A famous total computable function that is not primitive
+recursive. Nevertheless, it can be implemented with structural recursion on
+natural numbers, both with Church and inductive implementation.
 
 In all of the examples, the integer type is constructed from scratch using
 core functionality of the type theory of the underlying lambda calculus.
