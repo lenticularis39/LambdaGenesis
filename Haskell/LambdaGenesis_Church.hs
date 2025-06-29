@@ -48,6 +48,14 @@ times = \a -> natRec @Nat zero (\_ r -> plus r a)
 fact :: Nat -> Nat
 fact = natRec (suc zero) (\n r -> times (suc n) r)
 
+-- Fibonacci
+fib2 :: Nat -> Pair Nat Nat
+fib2 = natRec @(Pair Nat Nat) (pair @Nat @Nat (zero) (suc zero))
+  (\_ r -> pair @Nat @Nat (proj2 @Nat @Nat r) (plus (proj2 @Nat @Nat r) (proj1 @Nat @Nat r)))
+
+fib :: Nat -> Nat
+fib = \n -> proj1 @Nat @Nat (fib2 n)
+
 -- Ackermann
 ack :: Nat -> Nat -> Nat
 ack = natRec @(Nat -> Nat) (\x -> suc x) (\x f -> natRec @Nat (f (suc zero)) (\n y -> f y))

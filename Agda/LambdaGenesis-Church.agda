@@ -48,6 +48,14 @@ pred = Nat-rec zero (λ n r → n)
 fact : Nat → Nat
 fact = Nat-rec (suc zero) (λ n r → (suc n) * r)
 
+-- Fibonacci
+fib2 : Nat → Pair Nat Nat
+fib2 = Nat-rec (pair {Nat} {Nat} (zero) (suc zero))
+  (λ _ r → pair {Nat} {Nat} (proj₂ r) ((proj₁ r) + (proj₂ r)))
+
+fib : Nat → Nat
+fib = λ n → proj₁ (fib2 n)
+
 -- Ackermann
 ack : Nat → Nat → Nat
 ack = Nat-rec {Nat → Nat} (λ x → suc x) (λ x f → Nat-rec {Nat} (f (suc zero)) (λ n y → f y))
