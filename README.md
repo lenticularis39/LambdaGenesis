@@ -112,6 +112,7 @@ $ coqtop -noinit -l LambdaGenesis-Inductive.v
 ```
 
 [2] [Syntax extensions and notation scopes¶, section Number Notations - Rocq Prover documentation](https://rocq-prover.org/doc/V8.18.0/refman/user-extensions/syntax-extensions.html#number-notations)
+
 [3] [Inductive types and recursive functions - Rocq Prover documentation¶](https://rocq-prover.org/doc/V8.18.0/refman/language/core/inductive.html)
 
 ### Agda
