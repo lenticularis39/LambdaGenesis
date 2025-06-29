@@ -20,8 +20,8 @@ that and an inductive implementation.
 The project currently has implementations in the following languages:
 
 - ~~Coq (Church, inductive)~~
-- Agda (Church, ~~inductive~~)
-- Haskell (Church, ~~inductive~~)
+- Agda (Church, inductive)
+- Haskell (Church, inductive)
 - ~~Standard ML (inductive)~~
 
 Focus has been paid to avoid constructions that explicitly or implicitly
@@ -64,6 +64,7 @@ to bypass that.
 - Unlike Coq, Agda relies purely on pattern matching for doing computation
 on inductive types. We define Nat-rec as a structural recursion primitive
 using pattern matching, and implement the rest of the functions with that.
+- No `show` and `read` is needed for the inductive implementation.
 
 ## Haskell
 
