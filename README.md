@@ -19,7 +19,7 @@ that and an inductive implementation.
 
 The project currently has implementations in the following languages:
 
-- ~~Rocq (Church, inductive)~~
+- Rocq (Church, ~~inductive~~)
 - Agda (Church, inductive)
 - Haskell (Church, inductive)
 - ~~Standard ML (inductive)~~
@@ -52,6 +52,28 @@ Main> show (fact (read 5))
 Some programming languages have specific quirks in relation with this
 project, either in the implementation or in the underlying theory.
 
+### Rocq
+
+- Use `coqtop -noinit -l <file>` to test the examples.
+- The Church version uses this encoding (using syntax and an inductive
+decimal number type) for showing and reading numbers:
+```
+dec .0       = 0
+dec .1 .2 .3 = 123
+```
+You can also use numbers from "one" to "ten".
+
+Example:
+```
+$ coqtop -noinit -l LambdaGenesis-Church.v
+Coq < Compute show (ack three three).
+     = dec .6 .1
+     : NatRepr
+Coq < Compute show (fact (read (dec .9))).
+     = dec .3 .6 .2 .8 .8 .0
+     : NatRepr
+```
+
 ### Agda
 
 - Use `agda --interactive <file>` to test the examples. You can also type
@@ -66,8 +88,29 @@ on inductive types. We define Nat-rec as a structural recursion primitive
 using pattern matching, and implement the rest of the functions with that.
 - No `show` and `read` is needed for the inductive implementation.
 
+Example:
+```
+$ agda --interactive LambdaGenesis-Church.agda
+Main> show (fib (read 12))
+144
+$ agda --interactive LambdaGenesis-Inductive.agda
+Main> fib 12
+144
+```
+
+
 ### Haskell
 
 - Use `ghci -XNoImplicitPrelude <file>` to test the examples. Optionally,
 you can add `-fobject-code` to GHCi to make it compile the module for faster
 computation.
+
+Example:
+```
+$ ghci -XNoImplicitPrelude LambdaGenesis_Church.hs
+ghci> show (fact (read 10))
+3628800
+$ ghci -XNoImplicitPrelude LambdaGenesis_Inductive.hs
+ghci> show (ack (read 3) (read 4))
+125
+```
