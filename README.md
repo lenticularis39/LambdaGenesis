@@ -74,11 +74,11 @@ dec .0       = 0
 dec .1 .2 .3 = 123
 ```
 for `show` and `read`. You can also use numbers from "one" to "ten". Rocq
-does support defining numerical syntax properly without any conversions
+does support defining numerical syntax properly without any conversions [2]
 (according to its philosophy of having a separate meta-world), but this is
 currently not implemented.
 - In the inductive variant, defining `Nat` and `Pair` automatically
-defines `Nat_rect` and `Pair_rect` induction primitives [2]. You can see this
+defines `Nat_rect` and `Pair_rect` induction primitives [3]. You can see this
 yourself with `Check Nat_rect.`, respectivelly `Check Pair_rect.`. Those
 correspond to elimination rules in classical MLTT, and the former is used to
 implement `natRec` (which is just a non-dependent variant of `Nat_rect`) in
@@ -111,7 +111,8 @@ $ coqtop -noinit -l LambdaGenesis-Inductive.v
      : NatRepr
 ```
 
-[2] [Inductive types and recursive functions - Rocq Prover documentation¶](https://rocq-prover.org/doc/V8.18.0/refman/language/core/inductive.html)
+[2] [Syntax extensions and notation scopes¶, section Number Notations - Rocq Prover documentation](https://rocq-prover.org/doc/V8.18.0/refman/user-extensions/syntax-extensions.html#number-notations)
+[3] [Inductive types and recursive functions - Rocq Prover documentation¶](https://rocq-prover.org/doc/V8.18.0/refman/language/core/inductive.html)
 
 ### Agda
 
