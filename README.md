@@ -26,7 +26,7 @@ The project currently has implementations in the following languages:
 - Rocq (Church, inductive)
 - Agda (Church, inductive)
 - Haskell (Church, inductive)
-- ~~Standard ML (inductive)~~
+- Standard ML (inductive)
 
 Focus has been paid to avoid constructions that explicitly or implicitly
 use the fix point function, which is the underlying principle for
@@ -156,4 +156,29 @@ ghci> show (fact (read 10))
 $ ghci -XNoImplicitPrelude LambdaGenesis_Inductive.hs
 ghci> show (ack (read 3) (read 4))
 125
+```
+
+### Standard ML
+
+- Use `sml LambdaGenesis-Inductive.sml` to test the examples.
+- Like Haskell (which is a descendant of ML), general recursion has to be used
+to implement structural recursion on an inductive type.
+- Unlike Haskell, recursion is marked explicitly in Standard ML with the
+keyword `rec`. Here, we mark only `natRec` as that's the recursive primitive
+used in the rest of the program.
+- Also unlike Haskell, Standard ML cannot do System F, only System HM; hence,
+it is not strong enough to implement Church encoding, and the Church variant
+is omitted.
+
+Example:
+```
+$ sml  LambdaGenesis-Inductive.sml 
+Standard ML of New Jersey [Version 110.99.8; 64-bit; April 25, 2025]
+[opening LambdaGenesis-Inductive.sml]
+datatype Nat = suc of Nat | zero
+...
+val read = fn : int -> Nat
+- show (ack (read 3) (read 3))
+= ;
+val it = 61 : int
 ```
