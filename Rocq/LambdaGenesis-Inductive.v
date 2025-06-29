@@ -2,33 +2,23 @@
 Notation "x -> y" := (forall _ : x, y) (at level 99, right associativity).
 
 (* Natural numbers *)
-Definition Nat : Prop :=
-  forall A : Prop, (A -> A) -> A -> A.
-
-Definition zero : Nat :=
-  fun _ _ x => x.
-Definition suc : Nat -> Nat :=
-  fun n => (fun A f x => f (n A f x)).
+Inductive Nat : Type :=
+| zero : Nat
+| suc  : Nat -> Nat.
 
 (* Pairing *)
-Definition Pair : Prop -> Prop -> Prop :=
-  fun A B => forall C, (A -> B -> C) -> C.
+Inductive Pair (A B : Type) : Type :=
+| pair : A -> B -> Pair A B.
 
-Definition pair : forall {A : Prop}, forall {B : Prop}, A -> B -> Pair A B :=
-  fun _ _ x y C f => f x y.
+Definition proj1 : forall {A B : Type}, Pair A B -> A :=
+  fun A B p => Pair_rect A B (fun _ => A) (fun x _ => x) p.
 
-Definition proj1 : forall {A : Prop}, forall {B : Prop}, Pair A B -> A :=
-  fun A B p => p A (fun x y => x).
-
-Definition proj2 : forall {A : Prop}, forall {B : Prop}, Pair A B -> B :=
-  fun A B p => p B (fun x y => y).
+Definition proj2 : forall {A B : Type}, Pair A B -> B :=
+  fun A B p => Pair_rect A B (fun _ => B) (fun _ y => y) p.
 
 (* Recursion *)
-Definition natStep : forall {A : Prop}, (Nat -> A -> A) -> Pair Nat A -> Pair Nat A :=
-  fun A f p => pair (suc (proj1 p)) (f (proj1 p) (proj2 p)).
-
-Definition natRec : forall {A : Prop}, A -> (Nat -> A -> A) -> (Nat -> A) :=
-  fun A z s n => proj2 (n (Pair Nat A) (natStep s) (pair zero z)).
+Definition natRec : forall {A : Type}, A -> (Nat -> A -> A) -> (Nat -> A) :=
+  fun A x f => Nat_rect (fun _ => A) x f.
 
 (* Recursive addition and multiplication *)
 Definition add : Nat -> Nat -> Nat :=
@@ -49,7 +39,7 @@ Definition fact : Nat -> Nat :=
 
 (* Fibonacci *)
 Definition fib2 : Nat -> Pair Nat Nat :=
-  natRec (pair zero (suc zero)) (fun _ r => pair (proj2 r) ((proj1 r) + (proj2 r))).
+  natRec (pair Nat Nat zero (suc zero)) (fun _ r => pair Nat Nat (proj2 r) ((proj1 r) + (proj2 r))).
 
 Definition fib : Nat -> Nat :=
   fun n => proj1 (fib2 n).
@@ -59,7 +49,7 @@ Definition ack : Nat -> Nat -> Nat :=
   natRec (fun x => suc x) (fun x f => natRec (f (suc zero)) (fun n y => f y)).
 
 (* Interactivity *)
-Inductive NatRepr : Prop :=
+Inductive NatRepr : Type :=
 | dec : NatRepr
 | n0 : NatRepr -> NatRepr
 | n1 : NatRepr -> NatRepr
@@ -98,8 +88,11 @@ Fixpoint reprInc (r : NatRepr) : NatRepr :=
   | (x .9) => (reprInc x .0)
   end.
 
-Definition show (n : Nat) : NatRepr :=
-  n NatRepr reprInc (dec .0).
+Fixpoint show (n : Nat) : NatRepr :=
+  match n with
+  | zero  => (dec .0)
+  | suc m => reprInc (show m)
+  end.
 
 Definition one := suc zero.
 Definition two := suc one.

@@ -15,11 +15,15 @@ core functionality of the type theory of the underlying lambda calculus.
 All of the languages used support the declaration of inductive types, as
 in Martin-Löf type theory. For languages with a type system strong enough to
 implement computational Church encodings, we decided to implement both
-that and an inductive implementation. 
+that and an inductive implementation.
+
+Additionally, a pair type is constructed in a similar way. Church encoding
+variants use it to implement structural recursion, inductive variants use it
+only to compute Fibonacci.
 
 The project currently has implementations in the following languages:
 
-- Rocq (Church, ~~inductive~~)
+- Rocq (Church, inductive)
 - Agda (Church, inductive)
 - Haskell (Church, inductive)
 - ~~Standard ML (inductive)~~
@@ -47,6 +51,10 @@ Main> show (fact (read 5))
 120
 ```
 
+Note that in the implementation of those, features out of the scope of
+the examples may be used (e.g. inductive types in Church encoding examples
+or fix point recursion declarations).
+
 ## Notes to specific languages
 
 Some programming languages have specific quirks in relation with this
@@ -54,14 +62,40 @@ project, either in the implementation or in the underlying theory.
 
 ### Rocq
 
-- Use `coqtop -noinit -l <file>` to test the examples.
-- The Church version uses this encoding (using syntax and an inductive
-decimal number type) for showing and reading numbers:
+- Use `coqtop -noinit -l <file>` to test the examples, and
+`Compute <expression>.` (mind the dot!) to evaluate expressions.
+- We use an impredicative universe (`Prop`) to define the Church 
+version of `Nat`, avoiding the problem with type in type seen in Agda
+(which does not have an equivalent of the universe, due to having
+a different type system). This is not needed for the inductive variant.
+- Instead of converting to a native type, we use this encoding:
 ```
 dec .0       = 0
 dec .1 .2 .3 = 123
 ```
-You can also use numbers from "one" to "ten".
+for `show` and `read`. You can also use numbers from "one" to "ten". Rocq
+does support defining numerical syntax properly without any conversions
+(according to its philosophy of having a separate meta-world), but this is
+currently not implemented.
+- In the inductive variant, defining `Nat` and `Pair` automatically
+defines `Nat_rect` and `Pair_rect` induction primitives [2]. You can see this
+yourself with `Check Nat_rect.`, respectivelly `Check Pair_rect.`. Those
+correspond to elimination rules in classical MLTT, and the former is used to
+implement `natRec` (which is just a non-dependent variant of `Nat_rect`) in
+the inductive variant.
+- Note that unlike all other languages presented here, Rocq's philosophy
+is that "Rocq" is theorem prover, composed of several languages. The
+language for pure expressions is called "Gallina specification language";
+the language that LambdaGenesis uses is properly called Vernac, and is
+essentially a script language that operates in the Gallina world. You
+can replace `-l` with `-lv` to see the commands being executed.
+- The point above also means that `coqtop` is not a typical REPL, hence
+the need for prefixing expressions with `Compute`.
+- Unlike Agda, which mimicks Haskell, bare Rocq (with `-noinit`) only
+knows the `forall` primitive from calculus of constructions for forming
+types. We have to declare the familiar `->` ourselves as syntactic
+sugar. (Rocq without `-noinit` imports the sugar from the standard
+library.)
 
 Example:
 ```
@@ -72,7 +106,12 @@ Coq < Compute show (ack three three).
 Coq < Compute show (fact (read (dec .9))).
      = dec .3 .6 .2 .8 .8 .0
      : NatRepr
+$ coqtop -noinit -l LambdaGenesis-Inductive.v
+     = dec .1 .4 .4
+     : NatRepr
 ```
+
+[2] [Inductive types and recursive functions - Rocq Prover documentation¶](https://rocq-prover.org/doc/V8.18.0/refman/language/core/inductive.html)
 
 ### Agda
 
@@ -104,6 +143,8 @@ Main> fib 12
 - Use `ghci -XNoImplicitPrelude <file>` to test the examples. Optionally,
 you can add `-fobject-code` to GHCi to make it compile the module for faster
 computation.
+- Haskell is based on System F, where types do not have types. This avoids
+issues with defining the Church number type seen in the other languages.
 
 Example:
 ```
