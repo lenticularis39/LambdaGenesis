@@ -19,7 +19,7 @@ that and an inductive implementation.
 
 The project currently has implementations in the following languages:
 
-- ~~Coq (Church, inductive)~~
+- ~~Rocq (Church, inductive)~~
 - Agda (Church, inductive)
 - Haskell (Church, inductive)
 - ~~Standard ML (inductive)~~
@@ -32,7 +32,7 @@ to defining primitive eliminatation operations on types.
 
 [1] [Primitive recursive function - Wikipedia](https://en.wikipedia.org/wiki/Primitive_recursive_function)
 
-# Trying the code out
+## Trying the code out
 
 The provided code includes functions to convert between the language's
 built-in types and the primitive implementation, named `show` and `read`.
@@ -47,12 +47,12 @@ Main> show (fact (read 5))
 120
 ```
 
-# Notes to specific languages
+## Notes to specific languages
 
 Some programming languages have specific quirks in relation with this
 project, either in the implementation or in the underlying theory.
 
-## Agda
+### Agda
 
 - Use `agda --interactive <file>` to test the examples. You can also type
 the function name (e.g. `fact`) by itself to see the full expanded lambda
@@ -61,12 +61,12 @@ calculus form.
 providing challenges to implementing structural recursion on Church natural
 numbers. The Church version thus uses the unsafe option --type-in-type
 to bypass that.
-- Unlike Coq, Agda relies purely on pattern matching for doing computation
+- Unlike Rocq, Agda relies purely on pattern matching for doing computation
 on inductive types. We define Nat-rec as a structural recursion primitive
 using pattern matching, and implement the rest of the functions with that.
 - No `show` and `read` is needed for the inductive implementation.
 
-## Haskell
+### Haskell
 
 - Use `ghci -XNoImplicitPrelude <file>` to test the examples. Optionally,
 you can add `-fobject-code` to GHCi to make it compile the module for faster
