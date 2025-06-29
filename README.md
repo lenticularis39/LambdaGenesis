@@ -65,7 +65,7 @@ to bypass that.
 on inductive types. We define Nat-rec as a structural recursion primitive
 using pattern matching, and implement the rest of the functions with that.
 
-# Haskell
+## Haskell
 
 - Use `ghci -XNoImplicitPrelude <file>` to test the examples. Optionally,
 you can add `-fobject-code` to GHCi to make it compile the module for faster
