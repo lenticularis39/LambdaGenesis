@@ -30,6 +30,7 @@ The project currently has implementations in the following languages:
 - Agda (Church, inductive)
 - Haskell (Church, inductive)
 - Standard ML (inductive)
+- Rust (inductive; stretch)
 
 Focus has been paid to avoid constructions that explicitly or implicitly
 use the fix point function, which is the underlying principle for
@@ -175,7 +176,7 @@ is omitted.
 
 Example:
 ```
-$ sml  LambdaGenesis-Inductive.sml 
+$ sml LambdaGenesis-Inductive.sml 
 Standard ML of New Jersey [Version 110.99.8; 64-bit; April 25, 2025]
 [opening LambdaGenesis-Inductive.sml]
 datatype Nat = suc of Nat | zero
@@ -184,4 +185,27 @@ val read = fn : int -> Nat
 - show (ack (read 3) (read 3))
 = ;
 val it = 61 : int
+```
+
+### Rust
+- Use `evcxr` to test out in a REPL (see below).
+- Rust resembles a low-level ML: it has the same kind of algebraic types
+and pattern matching, but memory has to be taken care of manually. To avoid
+memory management, we stray a bit from the rules and import the `Box` type.
+- Other than the `Box` stuff, this is mostly similar to ML in its type
+system.
+- It might be possible to represent Church encoding using Rust generics.
+However, this is currently not implemented.
+
+Example:
+```
+$ evcxr 
+Welcome to evcxr. For help, type :help
+>> :dep ./lambda_genesis_inductive
+   Compiling lambda_genesis_inductive v0.1.0 (.../LambdaGenesis/Rust/lambda_genesis_inductive)
+>> use lambda_genesis_inductive::*
+>> show(&ack(&read(3), &read(4)))
+125
+>> show(&fact(&read(5)))
+120
 ```

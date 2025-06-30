@@ -1,3 +1,5 @@
 *.hi
 *.agdai
 *.o
+target/
+Cargo.lock
